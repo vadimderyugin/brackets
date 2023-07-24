@@ -13,26 +13,28 @@ module.exports = function check(str, bracketsConfig) {
 	let stack = []
 	const isClosedBracket = ['2', '4', '6', ')', '}', ']']
 	const isOpenBracket = ['1', '3', '5', '(', '{', '[']
-	const isOpenClosedBrackets = ['7', '8', '|']
+	const isOpenClosedSymbol = ['7', '8', '|']
+
 
 	for (let i = 0; i < str.length; i++) {
 		let curent = str[i]
+		const findClosedBracket = isClosedBracket.includes(curent)
+		const findOpenBracket = isOpenBracket.includes(curent)
+		const findOpenClosedSymbol = isOpenClosedSymbol.includes(curent)
 
-		if (isClosedBracket.includes(curent)) {
+		if (findClosedBracket) {
 			if (stack.pop() === brackets[curent]) {
 				continue
 			} else {
 				return false
 			}
-		} else if (isOpenBracket.includes(curent)) {
+		} else if (findOpenBracket) {
 			stack.push(curent)
-		}
-
-		if (isOpenClosedBrackets.includes(curent)) {
-			if(!stack.includes(curent)) {
+		} else if (findOpenClosedSymbol) {
+			if (!stack.includes(curent)) {
 				stack.push(curent)
 			} else {
-				if(stack.pop() === curent) {
+				if (stack.pop() === curent) {
 					continue
 				} else {
 					return false
@@ -40,7 +42,5 @@ module.exports = function check(str, bracketsConfig) {
 			}
 		}
 	}
-
-
-	return stack.length === 0 || stack.length % 2 === 0
+	return stack.length === 0
 }
